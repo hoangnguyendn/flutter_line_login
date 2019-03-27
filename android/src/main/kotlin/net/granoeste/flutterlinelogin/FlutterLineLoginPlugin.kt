@@ -15,11 +15,12 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import android.content.pm.PackageManager
 import android.content.pm.ApplicationInfo
+import kotlinx.coroutines.async
 
 
 class FlutterLineLoginPlugin(registrar: Registrar) : MethodCallHandler, EventChannel.StreamHandler, PluginRegistry.ActivityResultListener {
@@ -92,8 +93,8 @@ class FlutterLineLoginPlugin(registrar: Registrar) : MethodCallHandler, EventCha
             }
             "logout" -> {
                 if(BuildConfig.DEBUG) Log.d(TAG, "Method:logout")
-                launch {
-                    async(CommonPool) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    GlobalScope.async(Dispatchers.IO) {
                         return@async lineApiClient.logout()
                     }.await().let {
                         if (it.isSuccess) {
@@ -108,8 +109,8 @@ class FlutterLineLoginPlugin(registrar: Registrar) : MethodCallHandler, EventCha
             }
             "getProfile" -> {
                 if(BuildConfig.DEBUG) Log.d(TAG, "Method:getProfile")
-                launch {
-                    async(CommonPool) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    GlobalScope.async(Dispatchers.IO) {
                         return@async lineApiClient.profile
                     }.await().let {
 
@@ -134,8 +135,8 @@ class FlutterLineLoginPlugin(registrar: Registrar) : MethodCallHandler, EventCha
             }
             "currentAccessToken" -> {
                 if(BuildConfig.DEBUG) Log.d(TAG, "Method:currentAccessToken")
-                launch {
-                    async(CommonPool) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    GlobalScope.async(Dispatchers.IO) {
                         return@async lineApiClient.currentAccessToken
                     }.await().let {
                         if (it.isSuccess) {
@@ -151,8 +152,8 @@ class FlutterLineLoginPlugin(registrar: Registrar) : MethodCallHandler, EventCha
             }
             "verifyToken" -> {
                 if(BuildConfig.DEBUG) Log.d(TAG, "Method:verifyToken")
-                launch {
-                    async(CommonPool) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    GlobalScope.async(Dispatchers.IO) {
                         return@async lineApiClient.verifyToken()
                     }.await().let {
                         if (it.isSuccess) {
@@ -168,8 +169,8 @@ class FlutterLineLoginPlugin(registrar: Registrar) : MethodCallHandler, EventCha
             }
             "refreshToken" -> {
                 if(BuildConfig.DEBUG) Log.d(TAG, "Method:refreshToken")
-                launch {
-                    async(CommonPool) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    GlobalScope.async(Dispatchers.IO) {
                         return@async lineApiClient.refreshAccessToken()
                     }.await().let {
                         if (it.isSuccess) {
